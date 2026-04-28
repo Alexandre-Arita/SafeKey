@@ -1,0 +1,415 @@
+/**
+ * safekey.css
+ * Folha de estilos principal do SafeKey.
+ * 
+ * Responsabilidades:
+ *   - Definir paleta de cores clara/escura via CSS custom properties;
+ *   - Garantir layout responsivo (mobile-first) e acessível (foco visível);
+ *   - Prover animações leves de feedback (toast, força da senha).
+ *
+ * Requisitos de design atendidos:
+ *   - WCAG 2.1 AA (contraste, foco visível, navegação por teclado);
+ *   - Responsividade: breakpoints em 320px, 768px e 1024px;
+ *   - Dark mode automático via prefers-color-scheme.
+ */
+
+/* ================================================
+   VARIÁVEIS GLOBAIS / TEMA
+   ================================================ */
+
+:root {
+  /* Paleta clara (padrão) */
+  --bg-body: #f1f5f9;
+  --bg-card: #ffffff;
+  --bg-input: #f8fafc;
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --primary-text: #ffffff;
+  --border: #cbd5e1;
+  --radius: 12px;
+  --shadow: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.08);
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  --focus-ring: 0 0 0 3px rgb(37 99 235 / 0.35);
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+}
+
+/* Tema escuro: derivado da preferência do sistema operacional */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-body: #0f172a;
+    --bg-card: #1e293b;
+    --bg-input: #0f172a;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --border: #334155;
+    --shadow: 0 10px 15px -3px rgb(0 0 0 / 0.35), 0 4px 6px -4px rgb(0 0 0 / 0.35);
+  }
+}
+
+/* ================================================
+   RESET & BASE
+   ================================================ */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  background: var(--bg-body);
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  line-height: 1.5;
+}
+
+/* ================================================
+   LAYOUT / ESTRUTURA
+   ================================================ */
+
+.container {
+  width: 100%;
+  max-width: 520px;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+header h1 {
+  margin: 0 0 8px;
+  font-size: 1.75rem;
+  letter-spacing: -0.02em;
+}
+
+header p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 1rem;
+}
+
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 24px;
+}
+
+/* ================================================
+   FORMULÁRIO / CAMPOS
+   ================================================ */
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 8px;
+}
+
+/* Esconde visualmente, mas mantém disponível para leitores de tela */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Campo de saída da senha com fonte monoespaçada */
+.password-wrap {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+#passwordOutput {
+  flex: 1;
+  font-family: var(--font-mono);
+  font-size: 1.25rem;
+  padding: 14px 16px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--bg-input);
+  color: var(--text-main);
+  outline: none;
+  text-overflow: ellipsis;
+}
+
+#passwordOutput:focus-visible {
+  box-shadow: var(--focus-ring);
+  border-color: var(--primary);
+}
+
+/* Botões de ícone (copiar, etc.) */
+.icon-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--bg-input);
+  color: var(--text-main);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.icon-btn:hover {
+  background: var(--bg-body);
+}
+
+.icon-btn:active {
+  transform: scale(0.96);
+}
+
+.icon-btn:focus-visible {
+  box-shadow: var(--focus-ring);
+  outline: none;
+}
+
+/* ================================================
+   CONTROLE DE COMPRIMENTO (RANGE + NUMBER)
+   ================================================ */
+
+.length-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+input[type="range"] {
+  flex: 1;
+  cursor: pointer;
+}
+
+input[type="number"] {
+  width: 80px;
+  padding: 10px 12px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-input);
+  color: var(--text-main);
+  outline: none;
+}
+
+input[type="number"]:focus-visible {
+  box-shadow: var(--focus-ring);
+  border-color: var(--primary);
+}
+
+/* ================================================
+   OPÇÕES DE CARACTERES (CHECKBOXES)
+   ================================================ */
+
+.options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+@media (max-width: 360px) {
+  .options {
+    grid-template-columns: 1fr;
+  }
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  user-select: none;
+}
+
+.checkbox:hover {
+  border-color: var(--primary);
+}
+
+.checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--primary);
+  cursor: pointer;
+}
+
+.checkbox:focus-within {
+  box-shadow: var(--focus-ring);
+  border-color: var(--primary);
+}
+
+/* ================================================
+   ALERTAS & ESTADOS DE ERRO
+   ================================================ */
+
+/* Aviso de segurança (senha fraca) */
+.warning-box {
+  display: none;
+  align-items: flex-start;
+  gap: 10px;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid var(--warning);
+  color: #92400e;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  margin-bottom: 16px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .warning-box {
+    color: #fcd34d;
+    background: rgba(245, 158, 11, 0.15);
+  }
+}
+
+.warning-box.visible {
+  display: flex;
+}
+
+/* Texto de erro de validação */
+.error-text {
+  color: var(--danger);
+  font-size: 0.9rem;
+  margin-top: 6px;
+  display: none;
+}
+
+.error-text.visible {
+  display: block;
+}
+
+.helper {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+
+/* ================================================
+   BOTÃO PRIMÁRIO
+   ================================================ */
+
+.btn-primary {
+  width: 100%;
+  padding: 14px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--primary-text);
+  background: var(--primary);
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.btn-primary:hover {
+  background: var(--primary-hover);
+}
+
+.btn-primary:active {
+  transform: translateY(1px);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-primary:focus-visible {
+  box-shadow: var(--focus-ring);
+  outline: none;
+}
+
+/* ================================================
+   MEDIDOR DE FORÇA
+   ================================================ */
+
+.strength {
+  margin-top: 16px;
+}
+
+.strength-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.strength-track {
+  height: 6px;
+  background: var(--bg-input);
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.strength-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 999px;
+  transition: width 0.3s ease, background 0.3s ease;
+}
+
+/* ================================================
+   TOAST (FEEDBACK DA ÁREA DE TRANSFERÊNCIA)
+   ================================================ */
+
+#toast {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-20px);
+  background: var(--text-main);
+  color: var(--bg-card);
+  padding: 12px 20px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  box-shadow: var(--shadow);
+  z-index: 1000;
+}
+
+#toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ================================================
+   RODAPÉ
+   ================================================ */
+
+footer {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}

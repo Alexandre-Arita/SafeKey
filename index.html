@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Gerador de senhas seguras e aleatórias com criptografia de ponta. Nenhum dado é enviado para servidores."
+    />
+    <title>SafeKey — Gerador de Senhas Seguras</title>
+
+    <!--
+      Folha de estilos externa.
+      Responsável por toda a apresentação visual, temas claro/escuro,
+      responsividade e padrões de acessibilidade (foco visível, contraste).
+    -->
+    <link rel="stylesheet" href="safekey.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <!-- Cabeçalho de introdução -->
+      <header>
+        <h1>🔐 SafeKey</h1>
+        <p>Gerador de senhas seguras e aleatórias</p>
+      </header>
+
+      <!-- Card principal da aplicação -->
+      <main class="card">
+        <form id="passwordForm" novalidate>
+          <!-- =========================================
+               SEÇÃO: EXIBIÇÃO DA SENHA GERADA
+               ========================================= -->
+          <div class="form-group">
+            <label for="passwordOutput">Senha gerada</label>
+            <div class="password-wrap">
+              <input
+                id="passwordOutput"
+                type="text"
+                readonly
+                value=""
+                aria-live="polite"
+                aria-label="Senha gerada. Use Control+C para copiar."
+              />
+              <button
+                type="button"
+                class="icon-btn"
+                id="copyBtn"
+                aria-label="Copiar senha para a área de transferência"
+                title="Copiar senha"
+              >
+                <!-- Ícone de "copiar" (dois documentos sobrepostos) -->
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path
+                    d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+                  ></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- =========================================
+               SEÇÃO: DEFINIÇÃO DO COMPRIMENTO
+               ========================================= -->
+          <div class="form-group">
+            <label for="lengthRange">Tamanho da senha</label>
+            <div class="length-row">
+              <input
+                id="lengthRange"
+                type="range"
+                min="6"
+                max="128"
+                value="16"
+                aria-label="Tamanho da senha por deslizante"
+              />
+              <input
+                id="lengthNumber"
+                type="number"
+                min="6"
+                max="128"
+                value="16"
+                aria-label="Tamanho da senha por número"
+              />
+            </div>
+            <p class="helper">Defina um valor entre 6 e 128 caracteres.</p>
+          </div>
+
+          <!-- =========================================
+               SEÇÃO: TIPOS DE CARACTERES (CHECKBOXES)
+               ========================================= -->
+          <div class="form-group">
+            <label>Tipos de caracteres</label>
+            <div class="options">
+              <label class="checkbox" for="checkUpper">
+                <input type="checkbox" id="checkUpper" checked />
+                <span>MAIÚSCULAS</span>
+              </label>
+              <label class="checkbox" for="checkLower">
+                <input type="checkbox" id="checkLower" checked />
+                <span>minúsculas</span>
+              </label>
+              <label class="checkbox" for="checkNumber">
+                <input type="checkbox" id="checkNumber" checked />
+                <span>Números</span>
+              </label>
+              <label class="checkbox" for="checkSymbol">
+                <input type="checkbox" id="checkSymbol" checked />
+                <span>Símbolos</span>
+              </label>
+            </div>
+            <div class="error-text" id="typeError" role="alert">
+              Selecione ao menos um tipo de caractere.
+            </div>
+          </div>
+
+          <!-- =========================================
+               SEÇÃO: EXCLUSÃO DE AMBÍGUOS
+               ========================================= -->
+          <div class="form-group">
+            <label class="checkbox" for="checkAmbiguous" style="display: flex; width: 100%;">
+              <input type="checkbox" id="checkAmbiguous" />
+              <span
+                >Excluir caracteres ambíguos (<code>0 O 1 l I 5 S</code>)</span
+              >
+            </label>
+          </div>
+
+          <!-- Aviso de segurança para senhas frágeis (regra de negócio RN-005) -->
+          <div class="warning-box" id="securityWarning" role="status">
+            <span>⚠️</span>
+            <span
+              >Esta senha não é recomendada para uso em produção ou dados
+              sensíveis.</span
+            >
+          </div>
+
+          <!-- Botão principal de geração -->
+          <button type="submit" class="btn-primary" id="generateBtn">
+            Gerar Senha
+          </button>
+        </form>
+
+        <!-- =========================================
+             SEÇÃO: MEDIDOR DE FORÇA
+             ========================================= -->
+        <div class="strength" id="strengthBox" aria-live="polite">
+          <div class="strength-header">
+            <span>Força da senha</span>
+            <span id="strengthLabel">—</span>
+          </div>
+          <div class="strength-track">
+            <div class="strength-fill" id="strengthFill"></div>
+          </div>
+        </div>
+      </main>
+
+      <!-- Rodapé informativo sobre privacidade -->
+      <footer>
+        Nenhuma senha é enviada para servidores. Tudo processado localmente no
+        seu navegador.
+      </footer>
+    </div>
+
+    <!-- Toast flutuante de confirmação de cópia -->
+    <div id="toast" role="status" aria-live="polite">Senha copiada!</div>
+
+    <!--
+      Script principal da aplicação.
+      Carregado no final do body para garantir que o DOM esteja pronto.
+    -->
+    <script src="safekey.js"></script>
+  </body>
+</html>
