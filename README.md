@@ -1,27 +1,35 @@
-# SafeKey
-Gerador de senhas seguras e aleatórias
+# SafeKey — Gerador de Senhas Seguras (Web & CLI)
 
-Product Requirements Document (PRD)
-SafeKey — Gerador de Senhas Seguras (Web & CLI)
-Versão: 1.0  
-Status: Aprovado para Desenvolvimento  
-Data: 24 de Abril de 2026
----
-1. Visão Geral do Produto
-O SafeKey é uma aplicação leve e especializada para a geração de senhas aleatórias de alta entropia, disponível tanto como aplicação web responsiva quanto como interface de linha de comando (CLI). O produto resolve o problema da criação manual de credenciais fracas ou reutilizadas, oferecendo ao usuário controle total sobre o comprimento, a composição de caracteres e a complexidade da senha final.
-O diferencial do SafeKey está na simplicidade de uso aliada à segurança criptográfica: nenhuma senha gerada trafega por servidores de terceiros, todo o processo de randomização ocorre localmente (no navegador via Web Crypto API ou no terminal via geradores criptográficos do sistema operacional).
----
-2. Objetivo
-2.1 Objetivo Principal
-Fornecer uma ferramenta acessível, confiável e de alto desempenho que permita a criação de senhas fortes e personalizadas em menos de 30 segundos, eliminando a necessidade de fórmulas manuais ou geradores não auditáveis.
-2.2 Objetivos Específicos
-Entregar um MVP funcional em até 4 semanas, cobrindo a interface web e o utilitário CLI.
-Garantir que todas as senhas sejam produzidas por um Gerador de Números Aleatórios Criptograficamente Seguro (CSPRNG).
-Alcançar compatibilidade cross-platform (Windows, macOS, Linux para CLI; e navegadores modernos para Web).
-Assegurar conformidade com requisitos mínimos de acessibilidade digital (WCAG 2.1 nível AA).
----
-3. Público-Alvo
-Persona	Descrição	Necessidades Principais
-Usuário Final Não Técnico	Pessoas físicas que desejam proteger contas pessoais (redes sociais, bancos, e-mails).	Interface intuitiva, cliques mínimos, botão de copiar óbvio.
-Desenvolvedores & Profissionais de TI	DevOps, administradores de sistemas e engenheiros de software.	Geração rápida via terminal para variáveis de ambiente, pipelines CI/CD e provisionamento.
-Estudantes de Segurança da Informação	Académicos e entusiastas que estudam criptografia e políticas de senhas.	Transparência do algoritmo, exibição de métricas de entropia e controlo granular de caracteres.
+## Storytelling: Como a IA Impulsionou a Entrega
+
+Este projeto foi construído a partir de um Product Requirements Document (PRD) completo, evoluindo rapidamente de um conceito documental para um produto funcional com a ajuda de assistentes de IA. A colaboração acelerou decisivamente as seguintes frentes:
+
+✨ **Geração do PRD estruturado** com visão de produto, regras de negócio, critérios de aceitação (BDD) e roadmap de evoluções futuras  
+✨ **Arquitetura de referência separada em camadas** — HTML semântico, CSS isolado e módulo JavaScript com JSDoc  
+✨ **Implementação criptográfica auditável** com uso obrigatório de `crypto.getRandomValues` e *rejection sampling*, eliminando por completo o uso de `Math.random()`  
+✨ **Documentação técnica embutida** via docstrings nos scripts e comentários estruturais nos arquivos de estilo
+
+## Limitações Identificadas
+
+Apesar do ganho de velocidade, alguns pontos exigiram intervenção manual ou estão pendentes de iteração:
+
+⚠️ A IA propôs inicialmente um arquivo **HTML monolítico**; a separação de responsabilidades em três arquivos distintos exigiu orientação explícita do desenvolvedor  
+⚠️ **Testes automatizados** de entropia e auditoria de CSPRNG não foram gerados pela IA — a cobertura atual é manual  
+⚠️ A **interface CLI** (Node.js/Python) prevista no PRD para a v2.0 ainda não foi implementada neste MVP Web  
+⚠️ Validações rigorosas de **acessibilidade (WCAG 2.1 AA)** — como contraste dinâmico em modo escuro e ordem de foco — precisaram de revisão humana
+
+## Como Usar
+
+A versão MVP é puramente front-end e não requer build ou instalação de dependências.
+
+```bash
+# 1. Clone ou baixe os arquivos
+git clone https://github.com/seuusuario/safekey.git
+cd safekey
+
+# 2. Abra diretamente no navegador
+open index.html
+# Ou sirva localmente via servidor HTTP simples:
+python -m http.server 8080
+# npm: npx serve .
+
